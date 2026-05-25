@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiActivity, FiTrendingUp, FiCheckCircle, FiClock } from "react-icons/fi";
+import { FiActivity, FiTrendingUp, FiCheckCircle } from "react-icons/fi";
 
 interface DoctorMetrics {
     title: string;

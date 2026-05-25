@@ -5,7 +5,7 @@ import { LoginForm } from "../components/LoginForm";
 
 export const AuthPage: React.FC = () => {
     // Definimos los estados con inferencia de tipos (TS ya sabe que son booleans)
-    const [isLogin, setIsLogin] = useState<boolean>(true);
+    const [isLogin] = useState<boolean>(true);
     const [isForgot, setIsForgot] = useState<boolean>(false);
 
     return (
