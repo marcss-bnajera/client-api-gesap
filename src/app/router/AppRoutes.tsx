@@ -1,13 +1,26 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { DashboardPage } from "../layouts/DashboardPage";
 import { MainLayout } from "../../shared/components/layouts/MainLayout";
+import { EmergencyLayout } from "../../shared/components/layouts/EmergencyLayout";
 import { LoginForm } from "../../features/auth/components/LoginForm";
+import { EmergencyLoginForm } from "../../features/auth/components/EmergencyLoginForm";
 import { ProtectedRoute } from "../../features/auth/components/ProtectedRoute";
+import { EmergencyProtectedRoute } from "../../features/auth/components/EmergencyProtectedRoute";
 import { PacientesPage } from "../../features/pacientes/components/PacientesPage";
 import { PatientDetailPage } from "../../features/pacientes/components/PatientDetailPage";
 import { BuscarDpiPage } from "../../features/pacientes/components/BuscarDpiPage";
 import { EmergenciasPage } from "../../features/emergencias/components/EmergenciasPage";
+import { NuevaEmergenciaPage } from "../../features/emergencias/components/NuevaEmergenciaPage";
+import { EntrantesPage } from "../../features/emergencias/components/EntrantesPage";
+import { HistorialEmergenciasPage } from "../../features/emergencias/components/HistorialEmergenciasPage";
 import { SinIdentificarPage } from "../../features/sinIdentificar/components/SinIdentificarPage";
+import { useEmergencyAuthStore } from "../../features/auth/store/emergencyAuthStore";
+
+const EmergencyIndex = () => {
+  const user = useEmergencyAuthStore((s) => s.user);
+  if (user?.role === "ASISTENTE_RECEPCION_CLINICA") return <Navigate to="entrantes" replace />;
+  return <Navigate to="nueva" replace />;
+};
 
 export const AppRoutes = () => {
   return (
@@ -16,7 +29,7 @@ export const AppRoutes = () => {
       <Route path="/login" element={<LoginForm />} />
       <Route path="/" element={<Navigate to="/portal/dashboard" replace />} />
 
-      {/* Protected */}
+      {/* Portal clínico */}
       <Route
         path="/portal"
         element={
@@ -32,6 +45,22 @@ export const AppRoutes = () => {
         <Route path="buscar-dpi" element={<BuscarDpiPage />} />
         <Route path="emergencias" element={<EmergenciasPage />} />
         <Route path="sin-identificar" element={<SinIdentificarPage />} />
+      </Route>
+
+      {/* Módulo de emergencias — auth separado */}
+      <Route path="/emergencias/login" element={<EmergencyLoginForm />} />
+      <Route
+        path="/emergencias"
+        element={
+          <EmergencyProtectedRoute>
+            <EmergencyLayout />
+          </EmergencyProtectedRoute>
+        }
+      >
+        <Route index element={<EmergencyIndex />} />
+        <Route path="nueva"     element={<NuevaEmergenciaPage />} />
+        <Route path="entrantes" element={<EntrantesPage />} />
+        <Route path="historial" element={<HistorialEmergenciasPage />} />
       </Route>
 
       {/* 404 */}
