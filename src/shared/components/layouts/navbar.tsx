@@ -1,4 +1,4 @@
-import { FiBell, FiUser } from "react-icons/fi";
+import { FiBell, FiUser, FiMenu } from "react-icons/fi";
 import { useAuthStore } from "../../../features/auth/store/authStore";
 
 const ROLE_LABELS: Record<string, string> = {
@@ -7,7 +7,11 @@ const ROLE_LABELS: Record<string, string> = {
   ASISTENTE_RECEPCION_CLINICA: "Recepción Clínica",
 };
 
-export const Navbar = () => {
+interface NavbarProps {
+  onMenuOpen?: () => void;
+}
+
+export const Navbar = ({ onMenuOpen }: NavbarProps) => {
   const { user } = useAuthStore();
 
   const displayName = user
@@ -21,10 +25,19 @@ export const Navbar = () => {
     .join("");
 
   return (
-    <header className="bg-white/70 backdrop-blur-md border-b border-blue-100 px-6 h-16 flex items-center justify-between sticky top-0 z-40 shrink-0">
-      <div>
-        <p className="text-[#0A2647] font-bold text-sm">Portal Clínico</p>
-        <p className="text-slate-400 text-xs">Sistema Hospitalario GESAP</p>
+    <header className="bg-white/70 backdrop-blur-md border-b border-blue-100 px-4 lg:px-6 h-16 flex items-center justify-between sticky top-0 z-40 shrink-0">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuOpen}
+          className="lg:hidden p-2 text-slate-500 hover:text-[#0A2647] rounded-xl hover:bg-blue-50 transition-colors"
+          aria-label="Abrir menú"
+        >
+          <FiMenu size={22} />
+        </button>
+        <div>
+          <p className="text-[#0A2647] font-bold text-sm">Portal Clínico</p>
+          <p className="text-slate-400 text-xs">Sistema Hospitalario GESAP</p>
+        </div>
       </div>
 
       <div className="flex items-center gap-4">
