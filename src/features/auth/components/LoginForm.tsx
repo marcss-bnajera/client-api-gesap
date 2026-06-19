@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import imgLogo from "../../../assets/img/GESAPLogo.svg";
 import {
   FiMail, FiLock, FiEye, FiEyeOff,
-  FiShield, FiUsers, FiActivity, FiLoader,
+  FiShield, FiUsers, FiActivity, FiLoader, FiAlertTriangle,
 } from "react-icons/fi";
 import type { IconType } from "react-icons/lib";
 import { useAuthStore } from "../store/authStore";
@@ -29,6 +29,8 @@ export const LoginForm: React.FC = () => {
   const [showPass, setShowPass] = useState(false);
   const { login, loading, error } = useAuthStore();
   const navigate = useNavigate();
+
+  const wasKicked = new URLSearchParams(window.location.search).get("kicked") === "true";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -107,6 +109,16 @@ export const LoginForm: React.FC = () => {
             <h2 className="text-[#0A2647] text-2xl font-bold">Iniciar Sesión</h2>
             <p className="text-slate-500 text-sm mt-1">Acceso para personal clínico del sistema</p>
           </div>
+
+          {wasKicked && (
+            <div className="mb-5 bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl px-4 py-3 flex items-start gap-2.5">
+              <FiAlertTriangle size={16} className="text-amber-500 shrink-0 mt-0.5" />
+              <span>
+                <strong className="font-semibold">Sesión cerrada.</strong>{" "}
+                Un administrador del sistema ha cerrado tu sesión activa. Por favor inicia sesión nuevamente.
+              </span>
+            </div>
+          )}
 
           {error && (
             <div className="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
