@@ -1,26 +1,26 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-import { useAuthStore } from "../../features/auth/store/authStore";
+import { useEmergencyAuthStore } from "../../features/auth/store/emergencyAuthStore";
 
-export const axiosCore = axios.create({
+export const axiosEmergency = axios.create({
   baseURL: "/gesap/v1",
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
 });
 
 const attachToken = (config: InternalAxiosRequestConfig) => {
-  const token = useAuthStore.getState().token;
+  const token = useEmergencyAuthStore.getState().token;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 };
 
-axiosCore.interceptors.request.use(attachToken);
+axiosEmergency.interceptors.request.use(attachToken);
 
-axiosCore.interceptors.response.use(
+axiosEmergency.interceptors.response.use(
   (r) => r,
   (error: unknown) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      useAuthStore.getState().logout();
-      window.location.href = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/login`;
+      useEmergencyAuthStore.getState().logout();
+      window.location.href = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/emergencias/login`;
     }
     return Promise.reject(error);
   }

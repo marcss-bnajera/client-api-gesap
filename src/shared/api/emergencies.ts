@@ -62,11 +62,20 @@ export interface CreateUnidentifiedPatientPayload {
 export const createEmergencyApi = (payload: CreateEmergencyPayload) =>
   axiosCore.post<Emergency>("/emergencies", payload);
 
+export const getMyEmergenciesApi = () =>
+  axiosCore.get<Emergency[]>("/emergencies/mine");
+
 export const getPendingEmergenciesApi = (hospitalId: number) =>
   axiosCore.get<Emergency[]>(`/emergencies/pending/${hospitalId}`);
 
+export const getHospitalEmergenciesApi = (hospitalId: number, status?: string) =>
+  axiosCore.get<Emergency[]>(`/emergencies/hospital/${hospitalId}`, { params: status ? { status } : undefined });
+
 export const getEmergencyByIdApi = (id: number) =>
   axiosCore.get<Emergency>(`/emergencies/${id}`);
+
+export const getEmergencyConstanciaApi = (id: number) =>
+  axiosCore.get<{ constancia: Record<string, unknown> }>(`/emergencies/${id}/constancia`);
 
 export const updateEmergencyApi = (id: number, payload: Partial<CreateEmergencyPayload>) =>
   axiosCore.patch<Emergency>(`/emergencies/${id}`, payload);
