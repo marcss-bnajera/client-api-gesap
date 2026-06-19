@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# client-api-gesap
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portal clínico del Sistema GESAP. Interfaz para doctores, asistentes prehospitalarios y asistentes de recepción clínica.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 18 + TypeScript
+- Vite + Tailwind CSS v4
+- Zustand (estado global, persistido en localStorage)
+- Axios (cliente HTTP)
+- Socket.IO client (kick en tiempo real)
+- React Router v6
 
-## React Compiler
+## Puerto de desarrollo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+http://localhost:5174
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Roles con acceso
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Rol | Funcionalidades principales |
+|-----|-----------------------------|
+| `DOCTOR` | Consulta de pacientes y expedientes |
+| `ASISTENTE_PREHOSPITALARIO` | Crear emergencias, ver mis emergencias creadas |
+| `ASISTENTE_RECEPCION_CLINICA` | Recibir emergencias entrantes, asignar, completar, ver historial |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Instalación y desarrollo
+
+```bash
+pnpm install    # o npm install
+pnpm dev        # http://localhost:5174
+```
+
+Requiere que **gesap-api** esté corriendo en `localhost:3000`.
+
+## Módulo de emergencias
+
+El módulo de emergencias es una SPA separada dentro del mismo build, con su propio sistema de autenticación. Accesible en:
+
+- **Dev:** `http://localhost:5174/emergencias/login`
+- **Prod:** `https://gesap.lat/clinico/emergencias/login`
+
+Los roles PREHOSPITALARIO y RECEPCION_CLINICA deben iniciar sesión aquí con las mismas credenciales del sistema.
+
+## Proxy de desarrollo (Vite)
+
+No requiere `.env` — el proxy de Vite redirige automáticamente:
+
+| Path | Destino |
+|------|---------|
+| `/gesap/v1/*` | `http://localhost:3000` (gesap-api) |
+| `/api-ws/*` | `http://localhost:3000` WebSocket (kick en tiempo real) |
+
+## Build de producción
+
+```bash
+pnpm build
+# Genera dist/ con base en /clinico/
+# Copiar a www/client-api/ en el servidor para que nginx lo sirva
+```
+
+## Estructura principal
+
+```
+src/
+├── app/
+│   ├── main.tsx              # BrowserRouter con basename automático
+│   └── router/AppRoutes.tsx
+├── features/
+│   ├── auth/                 # Login, ProtectedRoute, stores
+│   └── emergencias/          # Módulo separado (login propio, vistas, stores)
+└── shared/
+    ├── api/                  # Cliente axios + funciones por módulo
+    ├── hooks/                # useKickListener, useEmergencyKickListener, useEmergencyNotifications
+    └── components/layouts/   # MainLayout, Sidebar, EmergencyLayout, EmergencySidebar
 ```
