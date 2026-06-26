@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // Importamos la imagen como un módulo para que Vite la procese correctamente
-import gesapLogo from "../assets/img/GESAPLogo.png";
+import gesapLogo from "../assets/img/GESAPLogo.svg";
 import { LoginForm } from "../components/LoginForm";
 
 export const AuthPage: React.FC = () => {
