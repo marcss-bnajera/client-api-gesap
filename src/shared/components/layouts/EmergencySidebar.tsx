@@ -83,7 +83,7 @@ export const EmergencySidebar = ({ isOpen = false, onClose }: EmergencySidebarPr
           <NavLink
             key={item.path}
             to={item.path}
-            onClick={() => item.badge && resetNotif()}
+            onClick={() => { if (item.badge) resetNotif(); onClose?.(); }}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-sm font-medium group ${
                 isActive
