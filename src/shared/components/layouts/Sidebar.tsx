@@ -97,8 +97,9 @@ export const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={onClose}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-sm font-medium group ${
+              `flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all text-sm font-medium group ${
                 isActive
                   ? "bg-gradient-to-r from-[#00ACC1] to-[#26A69A] text-white shadow-lg shadow-cyan-900/40"
                   : "text-blue-200/80 hover:bg-white/8 hover:text-white"
