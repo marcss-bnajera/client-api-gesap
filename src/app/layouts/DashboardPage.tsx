@@ -66,18 +66,18 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Role badge */}
-      <div className="bg-white border border-blue-50 rounded-2xl p-5 shadow-sm flex items-center gap-4">
+      <div className="bg-white border border-blue-50 rounded-2xl p-5 shadow-sm flex items-center gap-4 flex-wrap">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0E6BA8] to-[#00ACC1] flex items-center justify-center text-white text-xl font-bold shrink-0 shadow-md">
           {displayName.split(" ").slice(0, 2).map((w) => w[0]).join("")}
         </div>
-        <div>
-          <p className="text-xl font-extrabold text-[#0A2647]">{displayName}</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-xl font-extrabold text-[#0A2647] truncate">{displayName}</p>
           <span className="inline-block mt-1 text-xs font-bold px-3 py-0.5 rounded-full bg-[#EBF5FB] text-[#0E6BA8] border border-blue-100">
             {roleLabel}
           </span>
         </div>
         {user?.hospitalId && (
-          <div className="ml-auto text-right">
+          <div className="text-right shrink-0">
             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Hospital asignado</p>
             <p className="text-sm font-bold text-[#0A2647]">ID #{user.hospitalId}</p>
           </div>
